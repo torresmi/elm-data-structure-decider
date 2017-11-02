@@ -1,0 +1,11 @@
+{
+  "name": "elm-data-structure-decider",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "start": "elm-live src/App.elm --output=elm.js --debug",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michael Torres",
+  "license": "MIT"
+}
