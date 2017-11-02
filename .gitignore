@@ -4,3 +4,5 @@ app/elm.js
 app/tests/tests.js
 # elm-repl generated files
 repl-temp-*
+# node 
+app/node_modules/
