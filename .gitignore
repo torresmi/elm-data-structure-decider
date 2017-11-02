@@ -1,6 +1,6 @@
 # elm-package generated files
 app/elm-stuff/
-tests/elm-stuff/
-tests/tests.js
+app/elm.js
+app/tests/tests.js
 # elm-repl generated files
 repl-temp-*
