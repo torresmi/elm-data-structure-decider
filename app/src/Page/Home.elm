@@ -1,16 +1,20 @@
 module Page.Home exposing (Model, Msg(..), init, update, view)
 
+import Data.Package exposing (Package)
+import Data.Packages as Packages
 import Html exposing (Html)
 import Rocket exposing ((=>))
 
 
 type alias Model =
-    {}
+    { packages : List Package
+    }
 
 
 init : Model
 init =
-    {}
+    { packages = Packages.packages
+    }
 
 
 type Msg
