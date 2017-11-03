@@ -1,4 +1,4 @@
-module Data.Package exposing (Package)
+module Data.Package exposing (Package, Category(..))
 
 
 type Category
@@ -12,6 +12,7 @@ type Category
     | Graph
     | Tree
     | Tuple
+    | CRDT
     | Other
 
 
