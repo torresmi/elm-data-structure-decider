@@ -4,6 +4,7 @@ import Data.Package exposing (Package)
 import Data.Packages as Packages
 import Html exposing (Html)
 import Rocket exposing ((=>))
+import Views.Package
 
 
 type alias Model =
@@ -29,5 +30,5 @@ update msg model =
 
 
 view : Model -> Html msg
-view _ =
-    Html.text "Hello World!"
+view model =
+    Views.Package.view model.packages
