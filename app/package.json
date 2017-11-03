@@ -7,5 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Michael Torres",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "elm": "^0.18.0",
+    "elm-live": "^2.7.5"
+  }
 }
