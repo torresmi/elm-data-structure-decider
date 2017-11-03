@@ -18,4 +18,5 @@ type Category
 type alias Package =
     { name : String
     , link : String
+    , category : Category
     }
