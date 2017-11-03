@@ -1,4 +1,4 @@
-module Data.Package exposing (Package, Category(..))
+module Data.Package exposing (Package, Category(..), categories)
 
 
 type Category
@@ -14,6 +14,25 @@ type Category
     | Tuple
     | CRDT
     | Other
+
+
+{-| List of all categories, useful for iterating over
+-}
+categories : List Category
+categories =
+    [ List
+    , Dict
+    , Set
+    , Array
+    , Queue
+    , Stack
+    , Matrix
+    , Graph
+    , Tree
+    , Tuple
+    , CRDT
+    , Other
+    ]
 
 
 type alias Package =
