@@ -1,25 +1,40 @@
 module App exposing (main)
 
-import Html exposing (Html)
+import Bootstrap.Navbar as Navbar
+import Html exposing (Html, text)
+import Html.Attributes exposing (href)
 import Json.Decode exposing (Value)
 import Navigation exposing (Location)
 import Page.Home as Home
 import Page.NotFound as NotFound
 import Rocket exposing ((=>))
 import Route exposing (Route(..))
+import Views.Colors as Colors
 import Views.Page as Page
 
 
 type alias Model =
     { pageState : PageState
+    , navbarState : Navbar.State
     }
 
 
 init : Value -> Location -> ( Model, Cmd Msg )
 init value location =
-    setRoute (Route.fromLocation location)
-        { pageState = Loaded (Home Home.init)
-        }
+    let
+        initialModel =
+            { pageState = Loaded (Home Home.init)
+            , navbarState = navbarState
+            }
+
+        ( navbarState, navbarCmd ) =
+            Navbar.initialState NavbarMsg
+
+        ( routeState, routeCmd ) =
+            setRoute (Route.fromLocation location) initialModel
+    in
+    routeState
+        => Cmd.batch [ navbarCmd, routeCmd ]
 
 
 type Page
@@ -40,6 +55,7 @@ type Msg
     = SetRoute (Maybe Route)
     | HomeLoaded Home.Model
     | HomeMsg Home.Msg
+    | NavbarMsg Navbar.State
 
 
 setRoute : Maybe Route -> Model -> ( Model, Cmd Msg )
@@ -78,6 +94,9 @@ update msg model =
         ( HomeMsg pageMsg, Home pageModel ) ->
             toPage Home HomeMsg Home.update pageMsg pageModel
 
+        ( NavbarMsg state, _ ) ->
+            { model | navbarState = state } => Cmd.none
+
         ( _, _ ) ->
             model => Cmd.none
 
@@ -96,21 +115,34 @@ getPage pageState =
 -- View
 
 
+navbarTitle : String
+navbarTitle =
+    "Elm Data Structure Decider"
+
+
 view : Model -> Html Msg
 view model =
     case model.pageState of
         Loaded page ->
-            viewPage False page
+            viewPage False model.navbarState page
 
         TransitionFromPage page ->
-            viewPage True page
+            viewPage True model.navbarState page
 
 
-viewPage : Bool -> Page -> Html Msg
-viewPage loading page =
+navbarView : Navbar.State -> Html Msg
+navbarView state =
+    Navbar.config NavbarMsg
+        |> Navbar.lightCustomClass Colors.primaryColorClass
+        |> Navbar.brand [ href "#" ] [ text navbarTitle ]
+        |> Navbar.view state
+
+
+viewPage : Bool -> Navbar.State -> Page -> Html Msg
+viewPage loading navbar page =
     let
         frame =
-            Page.frame
+            Page.frame (navbarView navbar)
     in
     case page of
         NotFound ->
@@ -118,8 +150,8 @@ viewPage loading page =
 
         Home pageModel ->
             Home.view pageModel
-                |> frame
                 |> Html.map HomeMsg
+                |> frame
 
 
 subscriptions : Model -> Sub Msg
