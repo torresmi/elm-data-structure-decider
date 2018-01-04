@@ -1,6 +1,7 @@
-module Data.Packages exposing (..)
+module Data.Packages exposing (packageGroups, packages)
 
-import Data.Package as Package exposing (Package, Category(..))
+import Data.Package as Package exposing (Category(..), Package)
+import EveryDict exposing (EveryDict)
 
 
 packages : List Package
@@ -606,3 +607,25 @@ packages =
       , prioritized = Nothing
       }
     ]
+
+
+packageGroups : EveryDict Category (List Package)
+packageGroups =
+    List.foldl
+        (\package acc ->
+            EveryDict.update package.category
+                (updateOrInsert (\groupPackages -> package :: groupPackages) (List.singleton package))
+                acc
+        )
+        EveryDict.empty
+        packages
+
+
+updateOrInsert : (a -> a) -> a -> Maybe a -> Maybe a
+updateOrInsert f default existing =
+    case existing of
+        Just x ->
+            Just (f x)
+
+        Nothing ->
+            Just default

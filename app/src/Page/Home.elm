@@ -1,19 +1,23 @@
 module Page.Home exposing (Model, Msg(..), init, update, view)
 
-import Data.Package exposing (Package)
+import Bootstrap.Grid as Grid
+import Bootstrap.Grid.Col as Col
+import Data.Package exposing (Category, Package)
 import Data.Packages as Packages
+import EveryDict exposing (EveryDict)
 import Html exposing (Html)
 import Rocket exposing ((=>))
+import Views.Group as Group
 
 
 type alias Model =
-    { packages : List Package
+    { packages : EveryDict Category (List Package)
     }
 
 
 init : Model
 init =
-    { packages = Packages.packages
+    { packages = Packages.packageGroups
     }
 
 
@@ -28,6 +32,22 @@ update msg model =
             model => Cmd.none
 
 
-view : Model -> Html msg
-view _ =
-    Html.text "Hello World!"
+view : Model -> Html Msg
+view model =
+    let
+        cols =
+            packageGroups model.packages
+                |> List.map (\group -> Grid.col [] [ group ])
+    in
+    Grid.container [] [ Grid.simpleRow cols ]
+
+
+packageGroups : EveryDict Category (List Package) -> List (Html Msg)
+packageGroups packages =
+    EveryDict.toList packages
+        |> List.map packageGroup
+
+
+packageGroup : ( Category, List Package ) -> Html Msg
+packageGroup ( category, packages ) =
+    Group.view { category = category, packages = packages }

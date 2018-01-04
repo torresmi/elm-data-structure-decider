@@ -1,4 +1,4 @@
-module Data.Package exposing (Package, Category(..), categories)
+module Data.Package exposing (Category(..), Package, categories)
 
 
 type Category
